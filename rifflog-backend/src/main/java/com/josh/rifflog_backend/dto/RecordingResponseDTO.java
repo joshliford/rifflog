@@ -1,61 +1,44 @@
-package com.josh.rifflog_backend.model;
+package com.josh.rifflog_backend.dto;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+import com.josh.rifflog_backend.model.MediaType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "recordings")
-public class Recording {
+public class RecordingResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
     private String title;
 
     private LocalDate recordedAt;
 
-    // Cloudinary url
-    private String audioUrl;
-
-    // Cloudinary url
-    private String videoUrl;
-
-    // audio, video, or both
     private MediaType mediaType;
 
-    // for deletion
-    private String cloudinaryPublicId;
+    private String audioUrl;
 
-    // in seconds
-    private Integer duration;
+    private String videoUrl;
 
-    @Column(columnDefinition = "TEXT")
-    private String notes;
-
-    // guitar, amp sim, etc.
     private String gearUsed;
 
-    // blues, metal, electric, etc.
+    private String notes;
+
     private String tags;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    private Integer duration;
 
-    public Recording() {
+    public RecordingResponseDTO() {
 
     }
 
-    public Recording(String audioUrl, String cloudinaryPublicId, Integer duration, String gearUsed, Long id, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl) {
+    public RecordingResponseDTO(Long id, LocalDateTime createdAt, String audioUrl, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl) {
+        this.id = id;
+        this.createdAt = createdAt;
         this.audioUrl = audioUrl;
-        this.cloudinaryPublicId = cloudinaryPublicId;
         this.duration = duration;
         this.gearUsed = gearUsed;
-        this.id = id;
         this.mediaType = mediaType;
         this.notes = notes;
         this.recordedAt = recordedAt;
@@ -64,20 +47,24 @@ public class Recording {
         this.videoUrl = videoUrl;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
     public String getAudioUrl() {
         return audioUrl;
     }
 
     public void setAudioUrl(String audioUrl) {
         this.audioUrl = audioUrl;
-    }
-
-    public String getCloudinaryPublicId() {
-        return cloudinaryPublicId;
-    }
-
-    public void setCloudinaryPublicId(String cloudinaryPublicId) {
-        this.cloudinaryPublicId = cloudinaryPublicId;
     }
 
     public Integer getDuration() {
@@ -142,9 +129,5 @@ public class Recording {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
-    }
-
-    public Long getId() {
-        return id;
     }
 }

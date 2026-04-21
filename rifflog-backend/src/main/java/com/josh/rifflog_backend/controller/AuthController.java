@@ -1,7 +1,7 @@
 package com.josh.rifflog_backend.controller;
 
-import com.josh.rifflog_backend.dto.AuthRequest;
-import com.josh.rifflog_backend.dto.AuthResponse;
+import com.josh.rifflog_backend.dto.AuthRequestDTO;
+import com.josh.rifflog_backend.dto.AuthResponseDTO;
 import com.josh.rifflog_backend.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,14 +20,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody AuthRequest authRequest) throws Exception {
-        AuthResponse response = authService.register(authRequest);
+    public ResponseEntity<AuthResponseDTO> register(@RequestBody AuthRequestDTO authRequestDTO) throws Exception {
+        AuthResponseDTO response = authService.register(authRequestDTO);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) throws Exception {
-        AuthResponse response = authService.login(authRequest);
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO authRequestDTO) throws Exception {
+        AuthResponseDTO response = authService.login(authRequestDTO);
         return ResponseEntity.ok(response);
     }
 

@@ -1,7 +1,7 @@
 package com.josh.rifflog_backend.service;
 
-import com.josh.rifflog_backend.dto.AuthRequest;
-import com.josh.rifflog_backend.dto.AuthResponse;
+import com.josh.rifflog_backend.dto.AuthRequestDTO;
+import com.josh.rifflog_backend.dto.AuthResponseDTO;
 import com.josh.rifflog_backend.model.User;
 import com.josh.rifflog_backend.repository.UserRepository;
 import com.josh.rifflog_backend.security.JwtUtil;
@@ -10,8 +10,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -28,14 +26,14 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public AuthResponse register(AuthRequest authRequest) throws Exception {
-        String username = authRequest.getUsername();
+    public AuthResponseDTO register(AuthRequestDTO authRequestDTO) throws Exception {
+        String username = authRequestDTO.getUsername();
 
         if (userRepository.findByUsername(username).isPresent()) {
             throw new Exception("Username already exists");
         }
 
-        String hashedPassword = passwordEncoder.encode(authRequest.getPassword());
+        String hashedPassword = passwordEncoder.encode(authRequestDTO.getPassword());
 
         User user = new User(
                 username,
@@ -46,24 +44,24 @@ public class AuthService {
 
         String token  = jwtUtil.generateToken(user.getUsername());
 
-        return new AuthResponse(token);
+        return new AuthResponseDTO(token);
     }
 
-    public AuthResponse login(AuthRequest authRequest) throws Exception {
+    public AuthResponseDTO login(AuthRequestDTO authRequestDTO) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            authRequest.getUsername(),
-                            authRequest.getPassword()
+                            authRequestDTO.getUsername(),
+                            authRequestDTO.getPassword()
                     )
             );
         } catch (BadCredentialsException exception) {
             throw new Exception("Incorrect username or password", exception);
         }
 
-        String token = jwtUtil.generateToken(authRequest.getUsername());
+        String token = jwtUtil.generateToken(authRequestDTO.getUsername());
 
-        return new AuthResponse(token);
+        return new AuthResponseDTO(token);
     }
 
 }
