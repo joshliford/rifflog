@@ -32,6 +32,9 @@ public class User {
         this.id = id;
     }
 
+    public User(String username, String hashedPassword) {
+    }
+
     public Long getId() {
         return id;
     }
