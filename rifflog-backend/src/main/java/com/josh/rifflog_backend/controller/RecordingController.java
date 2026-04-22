@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /*
@@ -53,7 +54,7 @@ public class RecordingController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecording(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRecording(@PathVariable Long id) throws IOException {
         recordingService.deleteRecording(id);
         return ResponseEntity.noContent().build();
     }

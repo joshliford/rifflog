@@ -7,15 +7,18 @@ import com.josh.rifflog_backend.model.Recording;
 import com.josh.rifflog_backend.repository.RecordingRepository;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 public class RecordingService {
 
     private final RecordingRepository recordingRepository;
+    private final CloudinaryService cloudinaryService;
 
-    public RecordingService(RecordingRepository recordingRepository) {
+    public RecordingService(RecordingRepository recordingRepository, CloudinaryService cloudinaryService) {
         this.recordingRepository = recordingRepository;
+        this.cloudinaryService = cloudinaryService;
     }
 
     public List<RecordingResponseDTO> getAllRecordings() {
@@ -62,9 +65,12 @@ public class RecordingService {
         return convertToResponseDTO(recordingRepository.save(recording));
     }
 
-    public void deleteRecording(Long id) throws RuntimeException {
+    public void deleteRecording(Long id) throws RuntimeException, IOException {
         Recording recording = recordingRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("Recording not found"));
+        if (recording.getCloudinaryPublicId() != null) {
+            cloudinaryService.deleteFile(recording.getCloudinaryPublicId());
+        }
         recordingRepository.delete(recording);
     }
 
