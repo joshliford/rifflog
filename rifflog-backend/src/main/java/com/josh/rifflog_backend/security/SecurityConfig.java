@@ -3,6 +3,7 @@ package com.josh.rifflog_backend.security;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -42,6 +43,7 @@ public class SecurityConfig {
                                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // public endpoints (i.e. auth/login; auth/register)
+                        .requestMatchers(HttpMethod.GET, "/api/recordings/**").permitAll() // allow anyone to view recordings
                         .requestMatchers("/api/**").authenticated() // protected endpoints
                         .anyRequest().denyAll() // deny everything else
                 )
