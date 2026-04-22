@@ -2,6 +2,7 @@ package com.josh.rifflog_backend.service;
 
 import com.josh.rifflog_backend.dto.RecordingRequestDTO;
 import com.josh.rifflog_backend.dto.RecordingResponseDTO;
+import com.josh.rifflog_backend.exception.ResourceNotFoundException;
 import com.josh.rifflog_backend.model.Recording;
 import com.josh.rifflog_backend.repository.RecordingRepository;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,9 @@ public class RecordingService {
                 .toList();
     }
 
-    public RecordingResponseDTO getRecordingById(Long id) throws RuntimeException {
+    public RecordingResponseDTO getRecordingById(Long id) {
         Recording recording = recordingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Recording not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Recording not found"));
         return convertToResponseDTO(recording);
     }
 
@@ -47,7 +48,7 @@ public class RecordingService {
 
     public RecordingResponseDTO updateRecording(Long id, RecordingRequestDTO recordingRequest) {
         Recording recording = recordingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Recording not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Recording not found"));
         recording.setTitle(recordingRequest.getTitle());
         recording.setRecordedAt(recordingRequest.getRecordedAt());
         recording.setCloudinaryPublicId(recordingRequest.getCloudinaryPublicId());
@@ -63,7 +64,7 @@ public class RecordingService {
 
     public void deleteRecording(Long id) throws RuntimeException {
         Recording recording = recordingRepository.findById(id).
-                orElseThrow(() -> new RuntimeException("Recording not found"));
+                orElseThrow(() -> new ResourceNotFoundException("Recording not found"));
         recordingRepository.delete(recording);
     }
 

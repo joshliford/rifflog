@@ -1,5 +1,6 @@
 package com.josh.rifflog_backend.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +37,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // disable CSRF (Cross-Site Request Forgery)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // JWT-based authentication (doesn't use session cookies)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) ->
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // public endpoints (i.e. auth/login; auth/register)
                         .requestMatchers("/api/**").authenticated() // protected endpoints
