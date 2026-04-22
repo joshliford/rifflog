@@ -8,6 +8,9 @@ public class RecordingRequestDTO {
 
     private String title;
 
+    // for deletion
+    private String cloudinaryPublicId;
+
     private LocalDate recordedAt;
 
     private MediaType mediaType;
@@ -28,8 +31,9 @@ public class RecordingRequestDTO {
 
     }
 
-    public RecordingRequestDTO(String audioUrl, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl) {
+    public RecordingRequestDTO(String audioUrl, String cloudinaryPublicId, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl) {
         this.audioUrl = audioUrl;
+        this.cloudinaryPublicId = cloudinaryPublicId;
         this.duration = duration;
         this.gearUsed = gearUsed;
         this.mediaType = mediaType;
@@ -110,5 +114,13 @@ public class RecordingRequestDTO {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    public String getCloudinaryPublicId() {
+        return cloudinaryPublicId;
+    }
+
+    public void setCloudinaryPublicId(String cloudinaryPublicId) {
+        this.cloudinaryPublicId = cloudinaryPublicId;
     }
 }

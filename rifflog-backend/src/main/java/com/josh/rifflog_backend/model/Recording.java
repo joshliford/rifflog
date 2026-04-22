@@ -26,6 +26,7 @@ public class Recording {
     private String videoUrl;
 
     // audio, video, or both
+    @Enumerated(EnumType.STRING)
     private MediaType mediaType;
 
     // for deletion
@@ -146,5 +147,13 @@ public class Recording {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }
