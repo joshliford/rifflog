@@ -25,6 +25,12 @@ public class Recording {
     // Cloudinary url
     private String videoUrl;
 
+    // e.g. "E Standard", "Drop D"
+    private String tuning;
+
+    // e.g. "Am", "Dm", "E"
+    private String key;
+
     // audio, video, or both
     @Enumerated(EnumType.STRING)
     private MediaType mediaType;
@@ -51,7 +57,7 @@ public class Recording {
 
     }
 
-    public Recording(String audioUrl, String cloudinaryPublicId, Integer duration, String gearUsed, Long id, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl) {
+    public Recording(String audioUrl, String cloudinaryPublicId, Integer duration, String gearUsed, Long id, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl, String tuning, String key) {
         this.audioUrl = audioUrl;
         this.cloudinaryPublicId = cloudinaryPublicId;
         this.duration = duration;
@@ -63,6 +69,8 @@ public class Recording {
         this.tags = tags;
         this.title = title;
         this.videoUrl = videoUrl;
+        this.tuning = tuning;
+        this.key = key;
     }
 
     public String getAudioUrl() {
@@ -155,5 +163,21 @@ public class Recording {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getTuning() {
+        return tuning;
+    }
+
+    public void setTuning(String tuning) {
+        this.tuning = tuning;
     }
 }

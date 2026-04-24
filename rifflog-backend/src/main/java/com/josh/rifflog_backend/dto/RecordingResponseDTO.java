@@ -9,6 +9,10 @@ public class RecordingResponseDTO {
 
     private Long id;
 
+    private String tuning;
+
+    private String key;
+
     private LocalDateTime createdAt;
 
     private String title;
@@ -33,7 +37,7 @@ public class RecordingResponseDTO {
 
     }
 
-    public RecordingResponseDTO(Long id, LocalDateTime createdAt, String audioUrl, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl) {
+    public RecordingResponseDTO(Long id, LocalDateTime createdAt, String audioUrl, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl, String tuning, String key) {
         this.id = id;
         this.createdAt = createdAt;
         this.audioUrl = audioUrl;
@@ -45,6 +49,8 @@ public class RecordingResponseDTO {
         this.tags = tags;
         this.title = title;
         this.videoUrl = videoUrl;
+        this.tuning = tuning;
+        this.key = key;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -133,5 +139,21 @@ public class RecordingResponseDTO {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getTuning() {
+        return tuning;
+    }
+
+    public void setTuning(String tuning) {
+        this.tuning = tuning;
     }
 }

@@ -46,6 +46,8 @@ public class RecordingService {
         newRecording.setNotes(recordingRequest.getNotes());
         newRecording.setGearUsed(recordingRequest.getGearUsed());
         newRecording.setTags(recordingRequest.getTags());
+        newRecording.setTuning(recordingRequest.getTuning());
+        newRecording.setKey(recordingRequest.getKey());
         return convertToResponseDTO(recordingRepository.save(newRecording));
     }
 
@@ -62,6 +64,8 @@ public class RecordingService {
         recording.setNotes(recordingRequest.getNotes());
         recording.setGearUsed(recordingRequest.getGearUsed());
         recording.setTags(recordingRequest.getTags());
+        recording.setTuning(recordingRequest.getTuning());
+        recording.setKey(recordingRequest.getKey());
         return convertToResponseDTO(recordingRepository.save(recording));
     }
 
@@ -87,6 +91,8 @@ public class RecordingService {
         responseDTO.setNotes(recording.getNotes());
         responseDTO.setTags(recording.getTags());
         responseDTO.setDuration(recording.getDuration());
+        responseDTO.setTuning(recording.getTuning());
+        responseDTO.setKey(recording.getKey());
         return responseDTO;
     }
 

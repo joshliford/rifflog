@@ -11,6 +11,10 @@ public class RecordingRequestDTO {
     // for deletion
     private String cloudinaryPublicId;
 
+    private String tuning;
+
+    private String key;
+
     private LocalDate recordedAt;
 
     private MediaType mediaType;
@@ -31,8 +35,7 @@ public class RecordingRequestDTO {
 
     }
 
-    public RecordingRequestDTO(String audioUrl, String cloudinaryPublicId, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl) {
-        this.audioUrl = audioUrl;
+    public RecordingRequestDTO(String audioUrl, String cloudinaryPublicId, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl, String tuning,  String key) {
         this.cloudinaryPublicId = cloudinaryPublicId;
         this.duration = duration;
         this.gearUsed = gearUsed;
@@ -42,6 +45,8 @@ public class RecordingRequestDTO {
         this.tags = tags;
         this.title = title;
         this.videoUrl = videoUrl;
+        this.tuning = tuning;
+        this.key = key;
     }
 
     public String getAudioUrl() {
@@ -122,5 +127,21 @@ public class RecordingRequestDTO {
 
     public void setCloudinaryPublicId(String cloudinaryPublicId) {
         this.cloudinaryPublicId = cloudinaryPublicId;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getTuning() {
+        return tuning;
+    }
+
+    public void setTuning(String tuning) {
+        this.tuning = tuning;
     }
 }
