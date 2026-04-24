@@ -29,6 +29,7 @@ public class Recording {
     private String tuning;
 
     // e.g. "Am", "Dm", "E"
+    @Column(name = "musical_key")
     private String key;
 
     // audio, video, or both
