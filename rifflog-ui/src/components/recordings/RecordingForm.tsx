@@ -3,6 +3,7 @@ import StepIndicator from "./StepIndicator";
 import { Button } from "../ui/button";
 import type { UploadedFile } from "@/types";
 import DropZone from "./DropZone";
+import DescribeForm from "./DescribeForm";
 
 export default function RecordingForm() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -12,10 +13,47 @@ export default function RecordingForm() {
     recordedAt: "",
     tuning: "",
     key: "",
-    gearUsed: "",
     notes: "",
-    tags: "",
+    selectedTags: [] as string[],
+    selectedGear: [] as string[],
+    customTag: "",
   });
+
+  const handleTagToggle = (tag: string) => {
+    setFormData((prev) => {
+      const exists = prev.selectedTags.includes(tag);
+      return {
+        ...prev,
+        selectedTags: exists
+          ? prev.selectedTags.filter((t) => t !== tag)
+          : [...prev.selectedTags, tag],
+      };
+    });
+  };
+
+  const handleGearToggle = (gear: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedGear: prev.selectedGear.includes(gear)
+        ? prev.selectedGear.filter((g) => g !== gear)
+        : [...prev.selectedGear, gear],
+    }));
+  };
+
+  const handleFieldChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleCustomTagAdd = () => {
+    const tag = formData.customTag.trim().toUpperCase();
+    if (tag && !formData.selectedTags.includes(tag)) {
+      setFormData((prev) => ({
+        ...prev,
+        selectedTags: [...prev.selectedTags, tag],
+        customTag: "",
+      }));
+    }
+  };
 
   const nextStep = () => setCurrentStep((prev) => prev + 1);
   const prevStep = () => setCurrentStep((prev) => prev - 1);
@@ -47,7 +85,13 @@ export default function RecordingForm() {
           />
         )}
         {currentStep === 2 && (
-          <div className="text-[#76766f]">Step 2 - Describe</div>
+          <DescribeForm
+            formData={formData}
+            onFieldChange={handleFieldChange}
+            onTagToggle={handleTagToggle}
+            onGearToggle={handleGearToggle}
+            onCustomTagAdd={handleCustomTagAdd}
+          />
         )}
         {currentStep === 3 && (
           <div className="text-[#76766f]">Step 3 - Publish</div>
