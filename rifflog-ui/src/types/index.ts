@@ -13,6 +13,8 @@ export interface Recording {
     notes: string | null
     tags: string | null
     duration: number | null
+    tuning: string | null
+    key: string | null
 }
 
 export interface RecordingRequest {
@@ -26,6 +28,8 @@ export interface RecordingRequest {
     notes: string | null
     tags: string | null
     duration: number | null
+    tuning: string | null
+    key: string | null
 }
 
 export interface AuthRequest {
@@ -42,4 +46,11 @@ export interface AuthContextType {
     isAuthenticated: boolean
     login: (token: string) => void
     logout: () => void
+}
+
+export interface UploadedFile {
+  url: string;
+  publicId: string;
+  duration: number | null;
+  resourceType: string;
 }
