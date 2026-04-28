@@ -11,6 +11,8 @@ public class RecordingResponseDTO {
 
     private String tuning;
 
+    private String ampSimScreenshotUrl;
+
     private String key;
 
     private LocalDateTime createdAt;
@@ -37,8 +39,9 @@ public class RecordingResponseDTO {
 
     }
 
-    public RecordingResponseDTO(Long id, LocalDateTime createdAt, String audioUrl, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl, String tuning, String key) {
+    public RecordingResponseDTO(Long id, String ampSimScreenshotUrl, LocalDateTime createdAt, String audioUrl, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl, String tuning, String key) {
         this.id = id;
+        this.ampSimScreenshotUrl = ampSimScreenshotUrl;
         this.createdAt = createdAt;
         this.audioUrl = audioUrl;
         this.duration = duration;
@@ -155,5 +158,13 @@ public class RecordingResponseDTO {
 
     public void setTuning(String tuning) {
         this.tuning = tuning;
+    }
+
+    public String getAmpSimScreenshotUrl() {
+        return ampSimScreenshotUrl;
+    }
+
+    public void setAmpSimScreenshotUrl(String ampSimScreenshotUrl) {
+        this.ampSimScreenshotUrl = ampSimScreenshotUrl;
     }
 }

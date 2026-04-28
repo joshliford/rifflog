@@ -48,6 +48,7 @@ public class RecordingService {
         newRecording.setTags(recordingRequest.getTags());
         newRecording.setTuning(recordingRequest.getTuning());
         newRecording.setKey(recordingRequest.getKey());
+        newRecording.setAmpSimScreenshotUrl(recordingRequest.getAmpSimScreenshotUrl());
         return convertToResponseDTO(recordingRepository.save(newRecording));
     }
 
@@ -66,6 +67,7 @@ public class RecordingService {
         recording.setTags(recordingRequest.getTags());
         recording.setTuning(recordingRequest.getTuning());
         recording.setKey(recordingRequest.getKey());
+        recording.setAmpSimScreenshotUrl(recordingRequest.getAmpSimScreenshotUrl());
         return convertToResponseDTO(recordingRepository.save(recording));
     }
 
@@ -93,6 +95,7 @@ public class RecordingService {
         responseDTO.setDuration(recording.getDuration());
         responseDTO.setTuning(recording.getTuning());
         responseDTO.setKey(recording.getKey());
+        responseDTO.setAmpSimScreenshotUrl(recording.getAmpSimScreenshotUrl());
         return responseDTO;
     }
 

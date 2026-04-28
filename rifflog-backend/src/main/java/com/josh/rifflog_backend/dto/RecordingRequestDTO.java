@@ -8,6 +8,8 @@ public class RecordingRequestDTO {
 
     private String title;
 
+    private String ampSimScreenshotUrl;
+
     // for deletion
     private String cloudinaryPublicId;
 
@@ -35,8 +37,10 @@ public class RecordingRequestDTO {
 
     }
 
-    public RecordingRequestDTO(String audioUrl, String cloudinaryPublicId, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl, String tuning,  String key) {
+    public RecordingRequestDTO(String audioUrl, String ampSimScreenshotUrl, String cloudinaryPublicId, Integer duration, String gearUsed, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl, String tuning,  String key) {
         this.cloudinaryPublicId = cloudinaryPublicId;
+        this.audioUrl = audioUrl;
+        this.ampSimScreenshotUrl = ampSimScreenshotUrl;
         this.duration = duration;
         this.gearUsed = gearUsed;
         this.mediaType = mediaType;
@@ -143,5 +147,13 @@ public class RecordingRequestDTO {
 
     public void setTuning(String tuning) {
         this.tuning = tuning;
+    }
+
+    public String getAmpSimScreenshotUrl() {
+        return ampSimScreenshotUrl;
+    }
+
+    public void setAmpSimScreenshotUrl(String ampSimScreenshotUrl) {
+        this.ampSimScreenshotUrl = ampSimScreenshotUrl;
     }
 }

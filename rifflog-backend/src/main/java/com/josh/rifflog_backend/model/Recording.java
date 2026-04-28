@@ -19,6 +19,8 @@ public class Recording {
 
     private LocalDate recordedAt;
 
+    private String ampSimScreenshotUrl;
+
     // Cloudinary url
     private String audioUrl;
 
@@ -58,8 +60,9 @@ public class Recording {
 
     }
 
-    public Recording(String audioUrl, String cloudinaryPublicId, Integer duration, String gearUsed, Long id, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl, String tuning, String key) {
+    public Recording(String audioUrl, String ampSimScreenshotUrl, String cloudinaryPublicId, Integer duration, String gearUsed, Long id, MediaType mediaType, String notes, LocalDate recordedAt, String tags, String title, String videoUrl, String tuning, String key) {
         this.audioUrl = audioUrl;
+        this.ampSimScreenshotUrl = ampSimScreenshotUrl;
         this.cloudinaryPublicId = cloudinaryPublicId;
         this.duration = duration;
         this.gearUsed = gearUsed;
@@ -180,5 +183,13 @@ public class Recording {
 
     public void setTuning(String tuning) {
         this.tuning = tuning;
+    }
+
+    public String getAmpSimScreenshotUrl() {
+        return ampSimScreenshotUrl;
+    }
+
+    public void setAmpSimScreenshotUrl(String ampSimScreenshotUrl) {
+        this.ampSimScreenshotUrl = ampSimScreenshotUrl;
     }
 }
