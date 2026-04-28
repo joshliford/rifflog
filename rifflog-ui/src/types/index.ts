@@ -15,6 +15,7 @@ export interface Recording {
     duration: number | null
     tuning: string | null
     key: string | null
+    ampSimScreenshotUrl: string | null
 }
 
 export interface RecordingRequest {
