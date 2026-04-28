@@ -57,7 +57,10 @@ export default function DropZone({
       <div className="flex flex-col items-center gap-2">
         <h3 className="text-white text-2xl font-light">Drop a take here</h3>
         <p className="text-[#76766f] text-sm tracking-wide">
-          video | audio | up to 4 GB per file
+          Video or Audio | up to 4 GB per file
+        </p>
+        <p className="text-[#4a4a4f] text-xs tracking-wide">
+          Uploading a gear photo? It'll be routed to your Rig
         </p>
       </div>
       <div>

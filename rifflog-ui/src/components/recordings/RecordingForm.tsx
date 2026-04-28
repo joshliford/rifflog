@@ -1,13 +1,17 @@
 import { useState } from "react";
 import StepIndicator from "./StepIndicator";
 import { Button } from "../ui/button";
-import type { UploadedFile } from "@/types";
+import type { RecordingRequest, UploadedFile } from "@/types";
 import DropZone from "./DropZone";
 import DescribeForm from "./DescribeForm";
+import { createRecording } from "@/services/recordingsService";
+import { useNavigate } from "react-router-dom";
+import PublishStep from "./PublishStep";
 
 export default function RecordingForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     title: "",
     recordedAt: "",
@@ -18,6 +22,16 @@ export default function RecordingForm() {
     selectedGear: [] as string[],
     customTag: "",
   });
+
+  const navigate = useNavigate();
+
+  const handleUploadSuccess = (file: UploadedFile) => {
+    if (file.resourceType === 'image') {
+      navigate('/rig', { state: { uploadedImage: file } });
+      return;
+    }
+    setUploadedFile(file);
+  };
 
   const handleTagToggle = (tag: string) => {
     setFormData((prev) => {
@@ -55,6 +69,37 @@ export default function RecordingForm() {
     }
   };
 
+  const handleSubmit = async () => {
+    if (!uploadedFile) return;
+
+    const mediaType = uploadedFile.resourceType === "video" ? "VIDEO" : "AUDIO";
+
+    const request: RecordingRequest = {
+      title: formData.title,
+      recordedAt: formData.recordedAt,
+      mediaType,
+      audioUrl: uploadedFile.resourceType === "audio" ? uploadedFile.url : null,
+      videoUrl: uploadedFile.resourceType === "video" ? uploadedFile.url : null,
+      cloudinaryPublicId: uploadedFile.publicId,
+      gearUsed: formData.selectedGear.join(", "),
+      notes: formData.notes || null,
+      tags: formData.selectedTags.join(", "),
+      duration: uploadedFile.duration,
+      tuning: formData.tuning || null,
+      key: formData.key || null,
+    };
+
+    try {
+      setIsSubmitting(true);
+      await createRecording(request);
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to publish recording", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const nextStep = () => setCurrentStep((prev) => prev + 1);
   const prevStep = () => setCurrentStep((prev) => prev - 1);
 
@@ -71,7 +116,12 @@ export default function RecordingForm() {
         <p className="text-sm text-[#76766f]">New Upload</p>
         <div className="flex">
           <h4 className="text-3xl text-white font-light tracking-tight">
-            Log a new take<span className="text-[#ff6b35]">.</span>
+            {uploadedFile
+              ? uploadedFile.resourceType === "video"
+                ? "Log a new video take"
+                : "Log a new audio take"
+              : "Log a video or audio take"}
+            <span className="text-[#ff6b35]">.</span>
           </h4>
         </div>
       </div>
@@ -79,7 +129,7 @@ export default function RecordingForm() {
       <div className="flex-1 py-12">
         {currentStep === 1 && (
           <DropZone
-            onUploadSuccess={setUploadedFile}
+            onUploadSuccess={handleUploadSuccess}
             uploadedFile={uploadedFile}
             onClear={() => setUploadedFile(null)}
           />
@@ -94,7 +144,7 @@ export default function RecordingForm() {
           />
         )}
         {currentStep === 3 && (
-          <div className="text-[#76766f]">Step 3 - Publish</div>
+          <PublishStep uploadedFile={uploadedFile} formData={formData} />
         )}
       </div>
       {/* Navigation */}
@@ -120,8 +170,12 @@ export default function RecordingForm() {
               Next Step
             </Button>
           ) : (
-            <Button className="bg-[#ff6b35] text-white hover:bg-[#ff6b35]/90 hover:cursor-pointer">
-              Publish Take
+            <Button
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              className="bg-[#ff6b35] text-white hover:bg-[#ff6b35]/90 hover:cursor-pointer"
+            >
+              {isSubmitting ? "Publishing..." : "Publish"}
             </Button>
           )}
         </div>
