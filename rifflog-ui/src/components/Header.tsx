@@ -31,8 +31,8 @@ export default function Header() {
           <Disc3 size={22} className="text-[#ff6b35]" />
           <span className="text-3xl font-semibold text-white tracking-tight">Rifflog</span>
         </Link>
-        <span className="text-xs text-[#76766f]">/</span>
-        <span className="text-[10px] uppercase tracking-widest text-[#76766f]">Josh's Guitar Journal</span>
+        <span className="text-xs text-[#76766f] mt-4">/</span>
+        <span className="text-[10px] uppercase tracking-widest text-[#76766f] mt-4">Josh's Guitar Journal</span>
       </div>
 
       {/* Nav */}

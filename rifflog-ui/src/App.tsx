@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import RecordingDetail from "./pages/RecordingDetail";
 import RecordingForm from "./components/recordings/RecordingForm";
 import Header from "./components/Header";
+import Rig from "./pages/Rig";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -37,6 +38,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/recordings/:id" element={<RecordingDetail />} />
+        <Route path="/rig" element={<Rig />} />
       </Routes>
     </div>
   );
