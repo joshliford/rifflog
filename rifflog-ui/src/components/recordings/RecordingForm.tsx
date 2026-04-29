@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StepIndicator from "./StepIndicator";
 import { Button } from "../ui/button";
 import type { RecordingRequest, UploadedFile } from "@/types";
 import DropZone from "./DropZone";
 import DescribeForm from "./DescribeForm";
-import { createRecording } from "@/services/recordingsService";
-import { useNavigate } from "react-router-dom";
+import {
+  createRecording,
+  getRecordingById,
+  updateRecording,
+} from "@/services/recordingsService";
+import { useNavigate, useParams } from "react-router-dom";
 import PublishStep from "./PublishStep";
 
 export default function RecordingForm() {
@@ -25,9 +29,46 @@ export default function RecordingForm() {
 
   const navigate = useNavigate();
 
+  const { id } = useParams<{ id: string }>();
+
+  const editMode = !!id;
+
+  useEffect(() => {
+    if (!editMode) return;
+    const fetchRecording = async () => {
+      try {
+        const recordingData = await getRecordingById(Number(id));
+        setFormData({
+          title: recordingData.title,
+          recordedAt: recordingData.recordedAt,
+          tuning: recordingData.tuning || "",
+          key: recordingData.key || "",
+          notes: recordingData.notes || "",
+          selectedTags: recordingData.tags
+            ? recordingData.tags.split(",").map((tag) => tag.trim())
+            : [],
+          selectedGear: recordingData.gearUsed
+            ? recordingData.gearUsed.split(",").map((item) => item.trim())
+            : [],
+          customTag: "",
+        });
+        setUploadedFile({
+          url: recordingData.audioUrl || recordingData.videoUrl || "",
+          publicId: recordingData.cloudinaryPublicId || "",
+          duration: recordingData.duration,
+          resourceType: recordingData.mediaType === "VIDEO" ? "video" : "audio",
+        });
+        setCurrentStep(2);
+      } catch (error) {
+        console.error("Failed to load recording", error);
+      }
+    };
+    fetchRecording();
+  }, [id]);
+
   const handleUploadSuccess = (file: UploadedFile) => {
-    if (file.resourceType === 'image') {
-      navigate('/rig', { state: { uploadedImage: file } });
+    if (file.resourceType === "image") {
+      navigate("/rig", { state: { uploadedImage: file } });
       return;
     }
     setUploadedFile(file);
@@ -91,7 +132,11 @@ export default function RecordingForm() {
 
     try {
       setIsSubmitting(true);
-      await createRecording(request);
+      if (editMode) {
+        await updateRecording(Number(id), request);
+      } else {
+        await createRecording(request);
+      }
       navigate("/");
     } catch (error) {
       console.error("Failed to publish recording", error);
@@ -116,16 +161,18 @@ export default function RecordingForm() {
         <p className="text-sm text-[#76766f]">New Upload</p>
         <div className="flex">
           <h4 className="text-3xl text-white font-light tracking-tight">
-            {uploadedFile
-              ? uploadedFile.resourceType === "video"
-                ? "Log a new video take"
-                : "Log a new audio take"
-              : "Log a video or audio take"}
+            {editMode
+              ? "Edit take"
+              : uploadedFile
+                ? uploadedFile.resourceType === "video"
+                  ? "Log a new video take"
+                  : "Log a new audio take"
+                : "Log a video or audio take"}
             <span className="text-[#ff6b35]">.</span>
           </h4>
         </div>
       </div>
-      <StepIndicator currentStep={currentStep} />
+      <StepIndicator currentStep={currentStep} editMode={editMode} />
       <div className="flex-1 py-12">
         {currentStep === 1 && (
           <DropZone

@@ -2,6 +2,7 @@ import { Check } from "lucide-react";
 
 interface StepIndicatorProps {
   currentStep: number;
+  editMode: boolean;
 }
 
 const steps = [
@@ -10,11 +11,15 @@ const steps = [
   { number: 3, label: "PUBLISH" },
 ];
 
-export default function StepIndicator({ currentStep }: StepIndicatorProps) {
+export default function StepIndicator({
+  currentStep,
+  editMode,
+}: StepIndicatorProps) {
   return (
     <div className="flex items-center w-full border border-[#26262c]">
       {steps.map((step) => {
-        const isComplete = currentStep > step.number;
+        const isComplete =
+          editMode && step.number === 1 ? true : currentStep > step.number;
         const isCurrent = currentStep === step.number;
         return (
           <div
