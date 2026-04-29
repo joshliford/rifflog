@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll() // public endpoints (i.e. auth/login; auth/register)
                         .requestMatchers(HttpMethod.GET, "/api/recordings/**").permitAll() // allow anyone to view recordings
+                        .requestMatchers(HttpMethod.GET, "/api/rig/**").permitAll() // allow anyone to view rig photos/content
                         .requestMatchers("/api/**").authenticated() // protected endpoints
                         .anyRequest().denyAll() // deny everything else
                 )
