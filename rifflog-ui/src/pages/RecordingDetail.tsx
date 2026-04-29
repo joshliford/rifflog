@@ -84,15 +84,15 @@ export default function RecordingDetail() {
   }
 
   return (
-    <main className="grid grid-cols-3 gap-8 min-h-screen bg-[#0b0b0c] py-12 px-10">
-      {/* left side media player, notes, and admin modifiction buttons */}
-      <div className="col-span-2 flex flex-col gap-6">
+    <main className="flex flex-col min-h-screen bg-[#0b0b0c] py-12 px-10 gap-6">
+      {/* back button + title above the grid */}
+      <div className="flex flex-col gap-6">
         <Button
           onClick={() => navigate("/")}
           variant="outline"
-          className="flex items-center bg-[#ff6b35] hover:cursor-pointer text-black hover:bg-[#ff6b35]/90 uppercase tracking-widest text-xs gap-2 border-none w-fit"
+          className="flex items-center bg-transparent border-[#ff6b35] text-[#ff6b35] hover:bg-[#ff6b35]/10 hover:text-[#ff6b35] hover:cursor-pointer uppercase tracking-widest text-xs gap-1.5 w-fit"
         >
-          <ChevronLeft size={14} />
+          <ChevronLeft size={13} />
           Back to Dashboard
         </Button>
         <div>
@@ -103,57 +103,126 @@ export default function RecordingDetail() {
             {recording ? formatDate(recording.recordedAt) : ""}
           </p>
         </div>
-        {recording?.mediaType === 'VIDEO' || recording?.mediaType === 'BOTH' ? (
-          <video
-            src={recording.videoUrl ?? undefined}
-            controls
-            className="w-full border border-[#76766f] bg-black"
-          />
-        ) : null}
-        {recording?.mediaType === 'AUDIO' || recording?.mediaType === 'BOTH' ? (
-          <audio
-            src={recording.audioUrl ?? undefined}
-            controls
-            className="w-full"
-            style={{ colorScheme: 'dark' }}
-          />
-        ) : null}
-        {recording?.notes && (
-          <div className="mt-12">
-            <p className="text-[#959592] text-sm">Notes by Josh</p>
-            <p className="text-white text-lg mt-4 leading-tight">{recording.notes}</p>
-          </div>
-        )}
-        {isAuthenticated && (
-        <div className="flex gap-3 pt-4 border-t border-[#26262c]">
-            <Button
+      </div>
+
+      <div className="grid grid-cols-3 gap-8">
+        {/* left side media player, notes, and admin modifiction buttons */}
+        <div className="col-span-2 flex flex-col gap-6">
+          {recording?.mediaType === "VIDEO" ||
+          recording?.mediaType === "BOTH" ? (
+            <video
+              src={recording.videoUrl ?? undefined}
+              controls
+              className="w-full aspect-video border border-[#76766f] bg-black"
+            />
+          ) : null}
+          {recording?.mediaType === "AUDIO" ||
+          recording?.mediaType === "BOTH" ? (
+            <audio
+              src={recording.audioUrl ?? undefined}
+              controls
+              className="w-full"
+              style={{ colorScheme: "dark" }}
+            />
+          ) : null}
+          {recording?.notes && (
+            <div className="mt-12">
+              <p className="text-[#959592] text-sm">Notes by Josh</p>
+              <p className="text-white text-lg mt-4 leading-tight">
+                {recording.notes}
+              </p>
+            </div>
+          )}
+          {isAuthenticated && (
+            <div className="flex gap-3 pt-4 border-t border-[#26262c]">
+              <Button
                 onClick={() => navigate(`/admin/edit/${recording?.id}`)}
                 className="border-[#26262c] text-[#76766f] bg-transparent text-xs uppercase tracking-widest hover:cursor-pointer"
-            >
+              >
                 <Pencil size={13} />
                 Edit
-            </Button>
-            <Button
+              </Button>
+              <Button
                 onClick={handleDelete}
                 disabled={isDeleting}
                 className="bg-red-900/30 text-red-400 border border-red-900 hover:bg-red-900/50 text-xs uppercase tracking-widest hover:cursor-pointer"
-            >
+              >
                 <Trash2 size={13} />
-                {isDeleting ? 'Deleting...' : 'Delete'}
-            </Button>
+                {isDeleting ? "Deleting..." : "Delete"}
+              </Button>
+            </div>
+          )}
         </div>
-    )}
-      </div>
 
-      <div className="col-span-1 flex flex-col gap-4">
-        {/* right side top session card */}
-        <div></div>
+        <div className="col-span-1 flex flex-col gap-4">
+          {/* right side top session card */}
+          <div className="bg-[#111113] border border-[#26262c] flex flex-col px-4 py-3 gap-4">
+            <p className="text-[#76766f] text-sm">Session Log</p>
+            <div className="flex justify-between">
+              <p className="text-[#76766f] text-sm">Recorded Date</p>
+              <p className="text-white text-sm">
+                {formatDate(String(recording?.recordedAt))}
+              </p>
+            </div>
+            <div className="flex justify-between">
+              <p className="text-[#76766f] text-sm">Tuning</p>
+              <p className="text-white text-sm">{recording?.tuning || "-"}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="text-[#76766f] text-sm">Key</p>
+              <p className="text-white text-sm">{recording?.key || "-"}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="text-[#76766f] text-sm">Duration</p>
+              <p className="text-white text-sm">
+                {formatDuration(recording?.duration ?? null)}
+              </p>
+            </div>
+            {recording?.tags && (
+              <div className="flex flex-wrap gap-2 pt-2">
+                {recording.tags.split(",").map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-[10px] px-2 py-0.5 border bg-transparent border-[#ff6b35] text-[#ff6b35] rounded-sm uppercase tracking-widest"
+                  >
+                    {tag.trim()}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
 
-        {/* right side middle gear card */}
-        <div></div>
+          {/* right side middle gear card */}
+          {recording?.gearUsed && (
+            <div className="bg-[#111113] border border-[#26262c] flex flex-col px-4 py-3 gap-4">
+              <p className="text-[#76766f] text-sm">Gear Used</p>
+              <ul className="flex flex-col gap-2">
+                {recording.gearUsed.split(",").map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-center gap-2 text-sm text-white"
+                  >
+                    <span className="w-1 h-1 rounded-full bg-[#ff6b35] shrink-0" />
+                    {item.trim()}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-        {/* right side bottom amp sim card/screenshot */}
-        <div></div>
+          {/* right side bottom amp sim card/screenshot */}
+          {recording?.ampSimScreenshotUrl && (
+            <div className="bg-[#111113] border border-[#26262c] flex flex-col px-4 py-3 gap-4">
+              <p className="text-[#76766f] text-sm">Amp Sim Snapshot</p>
+
+              <img
+                src={recording.ampSimScreenshotUrl}
+                alt="Amp sim snapshot"
+                className="w-full rounded-sm border border-[#26262c]"
+              />
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );
