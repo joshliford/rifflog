@@ -4,6 +4,7 @@ import { getAllRecordings } from "../services/recordingsService";
 import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 import RecordingCard from "../components/recordings/RecordingCard";
+import { useSearchParams } from "react-router-dom";
 
 export default function Dashboard() {
   const [recordings, setRecordings] = useState<Recording[]>([]);
@@ -26,6 +27,20 @@ export default function Dashboard() {
     fetchRecordingData();
   }, []);
 
+  const [searchParams] = useSearchParams();
+
+  const searchQuery = searchParams.get("q")?.toLowerCase() || "";
+
+  const filteredRecordings = searchQuery
+    ? recordings.filter(
+        (recording) =>
+          recording.title.toLowerCase().includes(searchQuery) ||
+          recording.tags?.toLowerCase().includes(searchQuery) ||
+          recording.gearUsed?.toLowerCase().includes(searchQuery) ||
+          recording.notes?.toLowerCase().includes(searchQuery),
+      )
+    : recordings;
+
   if (isLoading) {
     return <LoadingSpinner page="Dashboard" />;
   }
@@ -42,15 +57,19 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen bg-[#0b0b0c]">
-      {recordings.length === 0 ? (
-        <div className="flex justify-center mt-20">
+      {filteredRecordings.length === 0 && recordings.length > 0 ? (
+        <div className="flex justify-center px-10 py-12">
+          <p className="text-gray-500">No recordings match your search.</p>
+        </div>
+      ) : recordings.length === 0 ? (
+        <div className="flex justify-center px-10 py-12">
           <p className="text-gray-500">
             No recordings yet. Upload one to get started.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-10 py-12">
-          {recordings.map((recording) => (
+          {filteredRecordings.map((recording) => (
             <RecordingCard key={recording.id} recording={recording} />
           ))}
         </div>
