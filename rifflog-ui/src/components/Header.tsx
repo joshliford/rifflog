@@ -4,7 +4,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { Disc3, Ghost, Guitar, Home, Search, Upload } from "lucide-react";
+import { Disc3, Guitar, Home, Search, Upload } from "lucide-react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useAuth } from "../context/AuthContext";

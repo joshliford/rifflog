@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import type { Recording } from "../types";
 import { getAllRecordings } from "../services/recordingsService";
-import { useAuth } from "../context/AuthContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 import RecordingCard from "../components/recordings/RecordingCard";
 import { useSearchParams } from "react-router-dom";
@@ -10,7 +9,6 @@ export default function Dashboard() {
   const [recordings, setRecordings] = useState<Recording[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const fetchRecordingData = async () => {
