@@ -70,7 +70,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         // set allowed origins, methods, and headers
-        configuration.setAllowedOrigins((List.of("http://localhost:5173", "rifflog.netlify.app")));
+        configuration.setAllowedOrigins((List.of("http://localhost:5173", "https://rifflog.netlify.app")));
         configuration.setAllowedMethods((List.of("GET", "POST", "PATCH", "DELETE", "OPTIONS")));
         configuration.setAllowedHeaders((List.of("Authorization", "Content-Type")));
         // required to allow Auth header to be sent
