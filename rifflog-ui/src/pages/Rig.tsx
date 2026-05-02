@@ -1,14 +1,17 @@
 import LoadingSpinner from "@/components/LoadingSpinner";
+import RigEditModal from "@/components/rig/RigEditModal";
 import RigPhotoCard from "@/components/rig/RigPhotoCard";
+import RigUploadModal from "@/components/rig/RigUploadModal";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import {
   createRigPhoto,
   deleteRigPhoto,
   getAllRigPhotos,
+  updateRigPhoto,
 } from "@/services/rigService";
 import type { RigPhoto } from "@/types";
-import { Upload } from "lucide-react";
+import { Upload, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Rig() {
@@ -16,6 +19,10 @@ export default function Rig() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [pendingUpload, setPendingUpload] = useState<CloudinaryResult["info"] | null>(null);
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const [editingPhoto, setEditingPhoto] = useState<RigPhoto | null>(null);
 
   const { isAuthenticated } = useAuth();
 
@@ -23,16 +30,24 @@ export default function Rig() {
     "ALL",
     ...new Set(
       photos
-        .map((p) => p.category)
-        // type guard (after the filter, category is considered a string, not null)
-        .filter((c): c is string => c !== null),
+        .flatMap((p) =>
+          p.category
+            ? p.category.split(",").map((c) => c.trim())
+            : [],
+        )
+        .filter(Boolean),
     ),
   ];
 
   const filteredPhotos =
     selectedCategory === "ALL"
       ? photos
-      : photos.filter((photo) => photo.category === selectedCategory);
+      : photos.filter((photo) =>
+          photo.category
+            ?.split(",")
+            .map((c) => c.trim())
+            .includes(selectedCategory),
+        );
 
   const handleDelete = async (id: number) => {
     const confirmed = window.confirm("Delete this asset?");
@@ -49,22 +64,39 @@ export default function Rig() {
         resourceType: "image",
         maxFiles: 1,
       },
-      async (_error: unknown, result: CloudinaryResult) => {
+      (_error: unknown, result: CloudinaryResult) => {
         if (result?.event === "success") {
-          const category = prompt("Category? (e.g. Guitars, Plugins, Pedals)");
-          const description = prompt("Description? (optional)");
-          await createRigPhoto({
-            imageUrl: result.info.secure_url,
-            cloudinaryPublicId: result.info.public_id,
-            category: category || null,
-            description: description || null,
-          });
-          const updated = await getAllRigPhotos();
-          setPhotos(updated);
+          setPendingUpload(result.info);
+          setShowModal(true);
         }
       },
     );
     widget.open();
+  };
+
+  const handleModalSubmit = async (categories: string[], description: string) => {
+    if (!pendingUpload) return;
+    await createRigPhoto({
+      imageUrl: pendingUpload.secure_url,
+      cloudinaryPublicId: pendingUpload.public_id,
+      category: categories.length > 0 ? categories.join(", ") : null,
+      description: description || null,
+    });
+    const updated = await getAllRigPhotos();
+    setPhotos(updated);
+    setShowModal(false);
+    setPendingUpload(null);
+  };
+
+  const handleEditSubmit = async (categories: string[], description: string) => {
+    if (!editingPhoto) return;
+    await updateRigPhoto(editingPhoto.id, {
+      category: categories.length > 0 ? categories.join(", ") : null,
+      description: description || null,
+    });
+    const updated = await getAllRigPhotos();
+    setPhotos(updated);
+    setEditingPhoto(null);
   };
 
   useEffect(() => {
@@ -98,13 +130,45 @@ export default function Rig() {
 
   return (
     <main className="flex flex-col min-h-screen bg-[#0b0b0c] py-12 px-10 gap-6">
+      {showModal && (
+        <RigUploadModal
+          onSubmit={handleModalSubmit}
+          onClose={() => { setShowModal(false); setPendingUpload(null); }}
+        />
+      )}
+      {editingPhoto && (
+        <RigEditModal
+          photo={editingPhoto}
+          onSubmit={handleEditSubmit}
+          onClose={() => setEditingPhoto(null)}
+        />
+      )}
+      {lightboxUrl && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 cursor-zoom-out"
+          onClick={() => setLightboxUrl(null)}
+        >
+          <button
+            className="absolute top-4 right-4 text-[#76766f] hover:text-white"
+            onClick={() => setLightboxUrl(null)}
+          >
+            <X size={24} />
+          </button>
+          <img
+            src={lightboxUrl}
+            alt="Expanded rig photo"
+            className="max-w-[90vw] max-h-[90vh] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
       <div className="flex items-center gap-4">
         <div className="flex-1" />
         <div className="flex justify-center items-center gap-4">
           <h1 className="text-white text-4xl tracking-wide">Josh's Rig</h1>
           <span className="text-[#76766f] mt-3">|</span>
           <p className="text-[#76766f] tracking-tight mt-3">
-            Check out my guitars and gear i'm using
+            Check out the guitars and gear i'm using
           </p>
         </div>
         <div className="flex-1 flex justify-end">
@@ -151,6 +215,8 @@ export default function Rig() {
               photo={photo}
               isAuthenticated={isAuthenticated}
               onDelete={handleDelete}
+              onExpand={setLightboxUrl}
+              onEdit={setEditingPhoto}
             />
           ))}
         </div>

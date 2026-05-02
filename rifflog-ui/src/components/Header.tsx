@@ -4,7 +4,7 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import { Disc3, Guitar, Home, Search, Upload } from "lucide-react";
+import { Disc3, Ghost, Guitar, Home, Search, Upload } from "lucide-react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useAuth } from "../context/AuthContext";
@@ -18,7 +18,7 @@ const authNavLinks = [{ to: "/admin/upload", label: "Upload", icon: Upload }];
 
 export default function Header() {
   const location = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   const navigate = useNavigate();
 
@@ -80,6 +80,15 @@ export default function Header() {
 
       {/* Search + upload */}
       <div className="flex items-center gap-3">
+        {isAuthenticated && (
+          <Button
+            variant={"ghost"}
+            onClick={logout}
+            className="text-[#ff6b35] border-[#ff6b35] bg-transparent hover:bg-[#ff6b35]/10 hover:text-[#ff6b35] hover:cursor-pointer"
+          >
+            Logout
+          </Button>
+        )}
         <div className="relative">
           <Search
             size={14}

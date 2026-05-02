@@ -44,16 +44,16 @@ export default function Login() {
       <div className="flex py-6">
         <h1 className="text-3xl text-white">Rifflog</h1>
       </div>
-      <div>
-        <Card className="w-full">
+      <div className="flex w-full max-w-sm">
+        <Card className="w-full border border-[#ff6b35] text-[#76766f]">
           <CardHeader>
-            <CardTitle>Login to your account</CardTitle>
+            <CardTitle className="text-center">Login to your account</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="flex flex-col gap-6" onSubmit={handleLogin}>
               <Label htmlFor="username">Username</Label>
               <Input
-                className="border rounded-lg pl-2 p-1"
+                className="border border-[#ff6b35] rounded-lg pl-2 p-1"
                 id="username"
                 type="text"
                 value={username}
@@ -63,7 +63,7 @@ export default function Login() {
               />
               <Label htmlFor="password">Password</Label>
               <Input
-                className="border rounded-lg pl-2 p-1"
+                className="border border-[#ff6b35] rounded-lg pl-2 p-1"
                 id="password"
                 type="password"
                 value={password}

@@ -32,6 +32,12 @@ public class RigPhotoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(rigPhoto);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<RigPhotoResponseDTO> updateRigPhoto(@PathVariable Long id, @RequestBody RigPhotoRequestDTO rigPhotoRequestDTO) {
+        RigPhotoResponseDTO rigPhoto = rigPhotoService.updateRigPhoto(id, rigPhotoRequestDTO);
+        return ResponseEntity.ok(rigPhoto);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRigPhoto(@PathVariable Long id) throws IOException {
         rigPhotoService.deleteRigPhoto(id);

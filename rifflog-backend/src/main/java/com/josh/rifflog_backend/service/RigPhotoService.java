@@ -37,6 +37,24 @@ public class RigPhotoService {
         return convertToResponseDTO(rigPhotoRepository.save(newRigPhoto));
     }
 
+    public RigPhotoResponseDTO updateRigPhoto(Long id, RigPhotoRequestDTO rigPhotoRequestDTO) {
+        RigPhoto rigPhoto = rigPhotoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("RigPhoto not found with id: " + id));
+        if (rigPhotoRequestDTO.getDescription() != null) {
+            rigPhoto.setDescription(rigPhotoRequestDTO.getDescription());
+        }
+        if (rigPhotoRequestDTO.getImageUrl() != null) {
+            rigPhoto.setImageUrl(rigPhotoRequestDTO.getImageUrl());
+        }
+        if (rigPhotoRequestDTO.getCategory() != null) {
+            rigPhoto.setCategory(rigPhotoRequestDTO.getCategory());
+        }
+        if (rigPhotoRequestDTO.getCloudinaryPublicId() != null) {
+            rigPhoto.setCloudinaryPublicId(rigPhotoRequestDTO.getCloudinaryPublicId());
+        }
+        return convertToResponseDTO(rigPhotoRepository.save(rigPhoto));
+    }
+
     public void deleteRigPhoto(Long id) throws RuntimeException, IOException {
         RigPhoto rigPhoto = rigPhotoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("RigPhoto Not Found"));

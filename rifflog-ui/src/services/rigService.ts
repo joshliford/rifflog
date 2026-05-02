@@ -13,4 +13,9 @@ export const createRigPhoto = async (request: RigPhotoRequest): Promise<RigPhoto
 
 export const deleteRigPhoto = async (id: number): Promise<void> => {
     await apiClient.delete(`/api/rig/${id}`);
-} 
+}
+
+export const updateRigPhoto = async (id: number, request: Partial<RigPhotoRequest>): Promise<RigPhoto> => {
+    const response = await apiClient.patch(`/api/rig/${id}`, request);
+    return response.data;
+}

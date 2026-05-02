@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import {
   deleteRecording,
   getRecordingById,
+  updateRecording,
 } from "@/services/recordingsService";
 import type { Recording } from "@/types";
 import { ChevronLeft, Pencil, Trash2 } from "lucide-react";
@@ -52,6 +53,47 @@ export default function RecordingDetail() {
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const openScreenshotUpload = () => {
+    if (!recording) return;
+    const widget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
+        uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
+        resourceType: "image",
+        maxFiles: 1,
+      },
+      async (_error: unknown, result: CloudinaryResult) => {
+        if (result?.event === "success") {
+          const updatedRequest = {
+            title: recording.title,
+            recordedAt: recording.recordedAt,
+            mediaType: recording.mediaType,
+            audioUrl: recording.audioUrl,
+            videoUrl: recording.videoUrl,
+            cloudinaryPublicId: recording.cloudinaryPublicId,
+            gearUsed: recording.gearUsed,
+            notes: recording.notes,
+            tags: recording.tags,
+            duration: recording.duration,
+            tuning: recording.tuning,
+            key: recording.key,
+            ampSimScreenshotUrl: result.info.secure_url,
+          };
+          await updateRecording(recording.id, updatedRequest);
+          setRecording((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  ampSimScreenshotUrl: result.info.secure_url,
+                }
+              : prev,
+          );
+        }
+      },
+    );
+    widget.open();
   };
 
   useEffect(() => {
@@ -211,17 +253,30 @@ export default function RecordingDetail() {
           )}
 
           {/* right side bottom amp sim card/screenshot */}
-          {recording?.ampSimScreenshotUrl && (
-            <div className="bg-[#111113] border border-[#26262c] flex flex-col px-4 py-3 gap-4">
-              <p className="text-[#76766f] text-sm">Amp Sim Snapshot</p>
-
+          <div className="bg-[#111113] border border-[#26262c] flex flex-col px-4 py-3 gap-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[#76766f] text-sm">Amp Sim Screenshot</p>
+              {isAuthenticated && (
+                <button
+                  onClick={openScreenshotUpload}
+                  className="text-[10px] text-[#ff6b35] hover:cursor-pointer uppercase tracking-widest hover:text-[#ff6b35]/70 transition-colors"  
+                >
+                  {recording?.ampSimScreenshotUrl ? 'Replace' : 'Upload'}
+                </button>
+              )}
+            </div>
+            {recording?.ampSimScreenshotUrl ? (
               <img
                 src={recording.ampSimScreenshotUrl}
-                alt="Amp sim snapshot"
+                alt="Amp sim screenshot"
                 className="w-full rounded-sm border border-[#26262c]"
               />
-            </div>
-          )}
+            ) : (
+              <p className="text-sm text-[#4a4a4f] text-center">
+                {isAuthenticated ? 'Upload an amp sim screenshot' : 'No amp sim screenshot uploaded'}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </main>

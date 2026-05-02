@@ -23,6 +23,11 @@ const GEAR_PRESETS = [
   "2025 PRS Custom 24",
   "1997 MIJ Fender 60s Strat Reissue",
   "2014 Taylor 214ce",
+  "Chorus",
+  "Reverb",
+  "Overdrive",
+  "Boost/Compressor",
+  "Delay",
   "Neural DSP: Mayer",
   "Neural DSP: Nolly X",
   "Neural DSP: Mesa Boogie",
@@ -39,6 +44,8 @@ const TAG_PRESETS = [
   "METAL",
   "CLEAN",
   "HEAVY",
+  "RHYTHM",
+  "LEAD",
 ];
 
 const inputClass =
