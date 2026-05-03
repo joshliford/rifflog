@@ -166,8 +166,8 @@ export default function Rig() {
         <div className="flex-1" />
         <div className="flex justify-center items-center gap-4">
           <h1 className="text-white text-4xl tracking-wide">Josh's Rig</h1>
-          <span className="text-[#76766f] mt-3">|</span>
-          <p className="text-[#76766f] tracking-tight mt-3">
+          <span className="text-[#76766f] mt-4">/</span>
+          <p className="text-[10px] text-[#76766f] tracking-widest uppercase mt-4">
             Check out the guitars and gear i'm using
           </p>
         </div>

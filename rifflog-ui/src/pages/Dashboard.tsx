@@ -62,7 +62,7 @@ export default function Dashboard() {
       ) : recordings.length === 0 ? (
         <div className="flex justify-center px-10 py-12">
           <p className="text-gray-500">
-            No recordings yet. Upload one to get started.
+            No recordings yet. Please check back later!
           </p>
         </div>
       ) : (

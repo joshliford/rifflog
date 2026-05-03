@@ -160,7 +160,7 @@ export default function RecordingForm() {
       <div className="flex flex-col px-6 py-12 gap-3">
         <p className="text-sm text-[#76766f]">New Upload</p>
         <div className="flex">
-          <h4 className="text-3xl text-white font-light tracking-tight">
+          <h4 className="text-3xl text-white italic font-light tracking-tight">
             {editMode
               ? "Edit take"
               : uploadedFile

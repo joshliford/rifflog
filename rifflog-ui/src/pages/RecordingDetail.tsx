@@ -169,7 +169,7 @@ export default function RecordingDetail() {
           ) : null}
           {recording?.notes && (
             <div className="mt-12">
-              <p className="text-[#959592] text-sm">Notes by Josh</p>
+              <p className="text-[#76766f] text-sm">Notes by Josh</p>
               <p className="text-white text-lg mt-4 leading-tight">
                 {recording.notes}
               </p>
@@ -199,7 +199,7 @@ export default function RecordingDetail() {
         <div className="col-span-1 flex flex-col gap-4">
           {/* right side top session card */}
           <div className="bg-[#111113] border border-[#26262c] flex flex-col px-4 py-3 gap-4">
-            <p className="text-[#76766f] text-sm">Session Log</p>
+            <h3 className="text-white italic text-lg">Session Log</h3>
             <div className="flex justify-between">
               <p className="text-[#76766f] text-sm">Recorded Date</p>
               <p className="text-white text-sm">
@@ -237,7 +237,7 @@ export default function RecordingDetail() {
           {/* right side middle gear card */}
           {recording?.gearUsed && (
             <div className="bg-[#111113] border border-[#26262c] flex flex-col px-4 py-3 gap-4">
-              <p className="text-[#76766f] text-sm">Gear Used</p>
+              <h3 className="text-white italic text-lg">Gear Used</h3>
               <ul className="flex flex-col gap-2">
                 {recording.gearUsed.split(",").map((item) => (
                   <li
@@ -255,7 +255,7 @@ export default function RecordingDetail() {
           {/* right side bottom amp sim card/screenshot */}
           <div className="bg-[#111113] border border-[#26262c] flex flex-col px-4 py-3 gap-4">
             <div className="flex items-center justify-between">
-              <p className="text-[#76766f] text-sm">Amp Sim Screenshot</p>
+              <h3 className="text-white italic text-lg">Amp Sim Screenshot</h3>
               {isAuthenticated && (
                 <button
                   onClick={openScreenshotUpload}

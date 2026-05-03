@@ -47,11 +47,11 @@ export default function Login() {
       <div className="flex w-full max-w-sm">
         <Card className="w-full border border-[#ff6b35] text-[#76766f]">
           <CardHeader>
-            <CardTitle className="text-center">Login to your account</CardTitle>
+            <CardTitle className="text-center text-white">Login to your account</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="flex flex-col gap-6" onSubmit={handleLogin}>
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username" className="text-white">Username</Label>
               <Input
                 className="border border-[#ff6b35] rounded-lg pl-2 p-1"
                 id="username"
@@ -61,7 +61,7 @@ export default function Login() {
                 placeholder="username"
                 required
               />
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-white">Password</Label>
               <Input
                 className="border border-[#ff6b35] rounded-lg pl-2 p-1"
                 id="password"
